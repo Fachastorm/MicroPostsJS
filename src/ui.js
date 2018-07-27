@@ -9,7 +9,7 @@ class UI {
 
 
   }
-
+  //Show all posts
   showPosts(posts) { 
     let output = '';
 
@@ -32,6 +32,101 @@ class UI {
     });
 
     this.post.innerHTML = output;
+
+  }
+  //Show alert message
+  showAlert(msg, className) { 
+    this.clearAlert(); 
+
+    //Create div 
+    const div = document.createElement('div'); 
+
+    //Add classes 
+    div.className = className;
+
+    //Add text 
+    div.appendChild(document.createTextNode(msg));
+
+    //Get the parent 
+    const container = document.querySelector('.postsContainer')
+
+    //Get posts 
+    const posts = document.querySelector('#posts');
+    
+    //Insert alert 
+    container.insertBefore(div, posts);
+
+    //Timeout 
+    setTimeout(() => { 
+      this.clearAlert()
+    }, 3000);
+
+  
+  }
+  //Clear alert message
+  clearAlert() { 
+    const currentAlert = document.querySelector('.alert'); 
+
+    if(currentAlert){ 
+      currentAlert.remove();
+    } 
+    
+
+  }
+  //Clear all fields
+  clearFields(){ 
+    this.titleInput.value = ''; 
+    this.body.value = '';
+
+  }
+
+  //Fill form to edit
+  fillForm(data){ 
+    this.titleInput.value = data.title;
+    this.body.value = data.body;
+    this.id.value = data.id;
+
+    this.changeFormState('edit');
+
+  }
+
+  //Clear ID hidden input 
+  clearIdInput(){ 
+    this.id.value = '';
+  }
+
+  //Change form state 
+  changeFormState(type){ 
+    if(type === 'edit'){ 
+      this.postSubmit.textContent = 'Update Post';
+      this.postSubmit.className = 'post-submit btn btn-warning btn-block';
+
+      //Create cancel button 
+      const button = document.createElement('button');
+      button.className = 'post-cancel btn btn-light btn-block';
+      button.appendChild(document.createTextNode('Cancel Edit'));
+
+      //Get parent 
+      const cardForm = document.querySelector('.card-form');
+      //Get element to insert before // <span> that we had.
+      const formEnd = document.querySelector('.form-end'); 
+
+      //Insert cancel button 
+      cardForm.insertBefore(button, formEnd);
+    } else { 
+      this.postSubmit.textContent = 'Post It';
+      this.postSubmit.className = 'post-submit btn btn-primary btn-block';
+
+      //Remove cancel button if it is there 
+      if(document.querySelector('.post-cancel')){ 
+        document.querySelector('.post-cancel').remove();
+      }
+
+      //Clear id from hidden field 
+      this.clearIdInput();
+      //Clear text fields 
+      this.clearFields();
+    }
 
   }
   
